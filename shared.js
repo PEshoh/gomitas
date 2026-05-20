@@ -175,124 +175,89 @@ function closeCart() {
 
 // Flying Gummy Particle Animation on Add to Cart
 function runAddToCartAnimation(clickedBtn, id) {
-  if (!clickedBtn || !window.gsap) {
-    openCart();
-    return;
-  }
-  
+  if (!clickedBtn || !window.gsap) { openCart(); return; }
+
   const cartBtn = document.getElementById('open-cart-btn');
-  if (!cartBtn) {
-    openCart();
-    return;
-  }
-  
-  // Create flying particle representing a glassy gummy bubble
+  if (!cartBtn) { openCart(); return; }
+
+  // Build the glassy gummy particle
   const particle = document.createElement('div');
   particle.className = `cart-fly-particle gummy-${id || 'generic'}`;
-  
-  // Color palette matching current theme variants
-  let color = '#7BB684'; // focus green
-  if (id === 'calm') {
-    color = '#9C82CD'; // calm purple
-  } else if (id === 'energy') {
-    color = '#FCAE3B'; // energy orange
-  }
-  
-  particle.style.position = 'fixed';
-  particle.style.zIndex = '99999';
-  particle.style.width = '24px';
-  particle.style.height = '24px';
-  particle.style.borderRadius = '50%';
-  particle.style.background = `radial-gradient(circle at 35% 35%, rgba(255,255,255,0.9) 0%, ${color} 70%, rgba(0,0,0,0.3) 100%)`;
-  particle.style.boxShadow = `0 4px 15px ${color}80, inset 0 -2px 4px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.6)`;
-  particle.style.pointerEvents = 'none';
-  particle.style.transform = 'translate(0, 0) scale(1)';
-  
-  const btnRect = clickedBtn.getBoundingClientRect();
+
+  let color = '#7BB684';                          // focus green
+  if (id === 'calm')   color = '#9C82CD';         // calm purple
+  if (id === 'energy') color = '#FCAE3B';         // energy orange
+
+  particle.style.cssText = [
+    'position:fixed',
+    'z-index:99999',
+    'width:24px',
+    'height:24px',
+    'border-radius:50%',
+    `background:radial-gradient(circle at 35% 35%, rgba(255,255,255,0.9) 0%, ${color} 70%, rgba(0,0,0,0.3) 100%)`,
+    `box-shadow:0 4px 15px ${color}80, inset 0 -2px 4px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.6)`,
+    'pointer-events:none',
+    'will-change:transform,opacity'
+  ].join(';');
+
+  const btnRect  = clickedBtn.getBoundingClientRect();
   const cartRect = cartBtn.getBoundingClientRect();
-  
-  // Center of clicked button
-  const startX = btnRect.left + btnRect.width / 2 - 12;
-  const startY = btnRect.top + btnRect.height / 2 - 12;
-  
-  // Center of cart button
-  const endX = cartRect.left + cartRect.width / 2 - 12;
-  const endY = cartRect.top + cartRect.height / 2 - 12;
-  
+
+  const startX = btnRect.left  + btnRect.width  / 2 - 12;
+  const startY = btnRect.top   + btnRect.height / 2 - 12;
+  const endX   = cartRect.left + cartRect.width  / 2 - 12;
+  const endY   = cartRect.top  + cartRect.height / 2 - 12;
+
   particle.style.left = `${startX}px`;
-  particle.style.top = `${startY}px`;
-  
+  particle.style.top  = `${startY}px`;
   document.body.appendChild(particle);
-  
+
   const dx = endX - startX;
   const dy = endY - startY;
-  
+
+  // -------------------------------------------------------------------
+  // VIEWPORT-CLAMPED ARC
+  // The arc peak is placed at the midpoint between start and end,
+  // pulled upward by an arcHeight proportional to the travel distance.
+  // The peak screen-Y is clamped to >= 20px so the particle NEVER
+  // exits the top of the viewport.
+  // -------------------------------------------------------------------
+  const DURATION = 0.75;
+
+  const midScreenY       = (startY + endY) / 2;
+  const desiredArcHeight = Math.abs(dy) * 0.45 + 50;
+  const rawPeakScreenY   = midScreenY - desiredArcHeight;
+  const peakScreenY      = Math.max(20, rawPeakScreenY);  // clamp
+  const peakOffset       = peakScreenY - startY;          // GSAP y translation
+
+  // Small horizontal bulge for a natural throw arc feel
+  const bowXMid   = dx * 0.5;
+  const bowXBulge = -dx * 0.07;
+
   const tl = gsap.timeline({
     onComplete: () => {
       particle.remove();
-      
-      // Impact bounce on the cart bag icon
+      // Cart icon squish & bounce on impact
       gsap.timeline()
-        .to(cartBtn, {
-          scale: 1.3,
-          y: -5,
-          duration: 0.12,
-          ease: 'power2.out'
-        })
-        .to(cartBtn, {
-          scale: 0.85,
-          y: 2,
-          duration: 0.08,
-          ease: 'power2.inOut'
-        })
-        .to(cartBtn, {
-          scale: 1.05,
-          y: -1,
-          duration: 0.08,
-          ease: 'power2.inOut'
-        })
-        .to(cartBtn, {
-          scale: 1,
-          y: 0,
-          duration: 0.08,
-          ease: 'power2.out',
-          onComplete: () => {
-            openCart();
-          }
-        });
+        .to(cartBtn, { scale: 1.30, y: -5, duration: 0.12, ease: 'power2.out'   })
+        .to(cartBtn, { scale: 0.85, y:  2, duration: 0.08, ease: 'power2.inOut' })
+        .to(cartBtn, { scale: 1.05, y: -1, duration: 0.08, ease: 'power2.inOut' })
+        .to(cartBtn, { scale: 1, y: 0, duration: 0.08, ease: 'power2.out', onComplete: openCart });
     }
   });
-  
-  // Animate X (horizontal)
+
+  // Two-keyframe motion: rise to clamped peak → fall to cart
   tl.to(particle, {
-    x: dx,
-    duration: 0.75,
-    ease: "power2.out"
+    keyframes: [
+      { x: bowXMid + bowXBulge, y: peakOffset, duration: DURATION * 0.42, ease: 'power1.out' },
+      { x: dx,                  y: dy,          duration: DURATION * 0.58, ease: 'power3.in'  }
+    ]
   }, 0);
-  
-  // Animate Y (vertical parabolic arc)
-  const peakY = Math.min(startY, endY) - 120;
-  const timeToPeak = 0.3;
-  
+
+  // Shrink + spin during entire flight
   tl.to(particle, {
-    y: peakY - startY,
-    duration: timeToPeak,
-    ease: "power1.out"
-  }, 0);
-  
-  tl.to(particle, {
-    y: dy,
-    duration: 0.75 - timeToPeak,
-    ease: "power2.in"
-  }, timeToPeak);
-  
-  // Scale down and rotate particle during flight
-  tl.to(particle, {
-    scale: 0.5,
-    rotation: 360,
-    opacity: 0.8,
-    duration: 0.75,
-    ease: "power1.inOut"
+    scale: 0.45, rotation: 380, opacity: 0.75,
+    duration: DURATION, ease: 'power1.inOut'
   }, 0);
 }
 
