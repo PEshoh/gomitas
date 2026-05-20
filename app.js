@@ -50,10 +50,10 @@ const badgeDesc = document.getElementById('badge-desc');
 const variantPills = document.querySelectorAll('.variant-pill');
 
 // Helper to add the active hero product using the global shared addToCart
-function addHeroProductToCart() {
+function addHeroProductToCart(e) {
   const data = productData[currentVariant];
   if (typeof addToCart === 'function') {
-    addToCart(currentVariant, data.fullName, 28.00, data.flavor);
+    addToCart(currentVariant, data.fullName, 28.00, data.flavor, 'one-time', null, e ? e.currentTarget : null);
   }
 }
 
@@ -70,29 +70,108 @@ function switchVariant(variant) {
   htmlElement.classList.remove('theme-focus', 'theme-calm', 'theme-energy');
   htmlElement.classList.add(`theme-${variant}`);
   
-  // 2. Play cohesive typography transition using GSAP timeline
-  const textTargets = ['#hero-title-accent', '#hero-tagline', '#hero-cta-btn'];
+  // 2. Play cohesive typography transition using GSAP timeline (Dynamic Split Text)
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (window.gsap) {
-    const textTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+  // Helper to split text into spans dynamically
+  function splitIntoSpans(element, type = 'words') {
+    if (!element) return [];
+    const text = element.textContent;
+    element.innerHTML = '';
+    
+    if (type === 'chars') {
+      return text.split('').map(char => {
+        const span = document.createElement('span');
+        span.style.display = 'inline-block';
+        span.style.whiteSpace = char === ' ' ? 'pre' : 'normal';
+        span.textContent = char;
+        element.appendChild(span);
+        return span;
+      });
+    } else {
+      return text.split(' ').map((word, i, arr) => {
+        const span = document.createElement('span');
+        span.style.display = 'inline-block';
+        span.textContent = word;
+        element.appendChild(span);
+        if (i < arr.length - 1) {
+          const space = document.createTextNode(' ');
+          element.appendChild(space);
+        }
+        return span;
+      });
+    }
+  }
 
-    textTimeline.to(textTargets, {
+  if (window.gsap && !prefersReduced) {
+    // Split the current text so we can animate it OUT
+    const currentAccentSpans = splitIntoSpans(heroTitleAccent, 'chars');
+    const currentTaglineSpans = splitIntoSpans(heroTagline, 'words');
+
+    const textTimeline = gsap.timeline({ defaults: { ease: "power3.inOut" } });
+
+    // Out animation
+    textTimeline.to(currentAccentSpans, {
       autoAlpha: 0,
-      y: -10,
-      duration: 0.15,
-      onComplete: () => {
-        if (heroTitleAccent) heroTitleAccent.textContent = data.titleAccent;
-        if (heroTagline) heroTagline.textContent = data.tagline;
-        if (heroCtaBtn) heroCtaBtn.textContent = data.btnText;
-      }
-    }).to(textTargets, {
-      autoAlpha: 1,
-      y: 0,
-      stagger: 0.05,
-      duration: 0.25
+      y: -8,
+      stagger: { each: 0.015, from: "start" },
+      duration: 0.2
+    }, 0);
+
+    textTimeline.to(currentTaglineSpans, {
+      autoAlpha: 0,
+      y: -6,
+      stagger: 0.008,
+      duration: 0.2
+    }, 0);
+
+    textTimeline.to('#hero-cta-btn', {
+      autoAlpha: 0,
+      y: -5,
+      duration: 0.15
+    }, 0);
+
+    // Swap content and animate IN
+    textTimeline.add(() => {
+      if (heroTitleAccent) heroTitleAccent.textContent = data.titleAccent;
+      if (heroTagline) heroTagline.textContent = data.tagline;
+      if (heroCtaBtn) heroCtaBtn.textContent = data.btnText;
+
+      // Split the new text
+      const newAccentSpans = splitIntoSpans(heroTitleAccent, 'chars');
+      const newTaglineSpans = splitIntoSpans(heroTagline, 'words');
+
+      // Set initial state
+      gsap.set(newAccentSpans, { autoAlpha: 0, y: 12 });
+      gsap.set(newTaglineSpans, { autoAlpha: 0, y: 8 });
+      gsap.set('#hero-cta-btn', { autoAlpha: 0, y: 10 });
+
+      // In animation
+      gsap.to(newAccentSpans, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: { each: 0.02, from: "start" },
+        duration: 0.45,
+        ease: "power4.out"
+      });
+
+      gsap.to(newTaglineSpans, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.012,
+        duration: 0.45,
+        ease: "power3.out"
+      });
+
+      gsap.to('#hero-cta-btn', {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.35,
+        ease: "power2.out"
+      });
     });
   } else {
-    // Fallback if GSAP fails to load
+    // Fallback if GSAP fails to load or reduced motion is preferred
     if (heroTitleAccent) heroTitleAccent.textContent = data.titleAccent;
     if (heroTagline) heroTagline.textContent = data.tagline;
     if (heroCtaBtn) heroCtaBtn.textContent = data.btnText;
@@ -212,7 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const sections = sectionIds.map(id => document.getElementById(id)).filter(el => el !== null);
   const navLinkItems = document.querySelectorAll('.nav-link-item');
   const navLinksUl = document.querySelector('.nav-links');
-  const navIndicator = document.querySelector('.nav-indicator-item');
+  const navIndicator = document.querySelector('.nav-indicator-item'); // the absolute-positioned wrapper li
+  const navIndicatorPill = document.getElementById('nav-indicator-pill'); // the visual pill inside
 
   function getNavLinkByHref(href) {
     return document.querySelector(`.nav-link-item[href="${href}"]`);
@@ -221,45 +301,70 @@ document.addEventListener('DOMContentLoaded', () => {
   function positionIndicator(link, immediate = false) {
     if (!link || !navIndicator || !navLinksUl) return;
     
-    // Disable active sliding animations on mobile viewport (nav hidden)
     const isMobile = window.innerWidth <= 768;
     if (isMobile) {
-      const pill = navIndicator.querySelector('.nav-indicator-pill');
-      if (pill) pill.style.opacity = '0';
+      if (window.gsap) {
+        gsap.to(navIndicatorPill, { autoAlpha: 0, duration: 0.2 });
+      } else {
+        if (navIndicatorPill) navIndicatorPill.style.opacity = '0';
+      }
       return;
     }
 
-    const targetLeft = link.offsetLeft;
-    const targetWidth = link.offsetWidth;
-    const targetHeight = link.offsetHeight;
-    const targetTop = link.offsetTop;
+    // getBoundingClientRect gives accurate positions regardless of flex/grid layout
+    const ulRect = navLinksUl.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
     
-    const pill = navIndicator.querySelector('.nav-indicator-pill');
+    const targetLeft = linkRect.left - ulRect.left;
+    const targetWidth = linkRect.width;
+    const targetTop = linkRect.top - ulRect.top;
+    const targetHeight = linkRect.height;
     
+    // Scale factors relative to 100px x 40px base dimension
+    const scaleXVal = targetWidth / 100;
+    const scaleYVal = targetHeight / 40;
+
     if (immediate) {
-      navIndicator.style.left = `${targetLeft}px`;
-      navIndicator.style.width = `${targetWidth}px`;
-      navIndicator.style.top = `${targetTop}px`;
-      navIndicator.style.height = `${targetHeight}px`;
-      if (pill) pill.style.opacity = '1';
+      if (window.gsap) {
+        gsap.set(navIndicator, {
+          x: targetLeft,
+          scaleX: scaleXVal,
+          y: targetTop,
+          scaleY: scaleYVal
+        });
+        gsap.set(navIndicatorPill, { autoAlpha: 1 });
+      } else {
+        navIndicator.style.transform = `translate(${targetLeft}px, ${targetTop}px) scale(${scaleXVal}, ${scaleYVal})`;
+        if (navIndicatorPill) navIndicatorPill.style.opacity = '1';
+      }
     } else {
       if (window.gsap) {
-        gsap.killTweensOf(navIndicator); // Halt running animations to prevent overlaps
-        if (pill) gsap.to(pill, { opacity: 1, duration: 0.2 });
-        gsap.to(navIndicator, {
-          left: targetLeft,
-          width: targetWidth,
-          top: targetTop,
-          height: targetHeight,
-          duration: 0.38,
-          ease: "elastic.out(1, 0.4)" // Fluid magnetic stretch
-        });
+        gsap.killTweensOf([navIndicator, navIndicatorPill]);
+        
+        // Check reduced motion preference
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReduced) {
+          gsap.set(navIndicator, {
+            x: targetLeft,
+            scaleX: scaleXVal,
+            y: targetTop,
+            scaleY: scaleYVal
+          });
+          gsap.to(navIndicatorPill, { autoAlpha: 1, duration: 0.15 });
+        } else {
+          gsap.to(navIndicator, {
+            x: targetLeft,
+            scaleX: scaleXVal,
+            y: targetTop,
+            scaleY: scaleYVal,
+            duration: 0.38,
+            ease: "elastic.out(1, 0.4)"
+          });
+          gsap.to(navIndicatorPill, { autoAlpha: 1, duration: 0.15 });
+        }
       } else {
-        navIndicator.style.left = `${targetLeft}px`;
-        navIndicator.style.width = `${targetWidth}px`;
-        navIndicator.style.top = `${targetTop}px`;
-        navIndicator.style.height = `${targetHeight}px`;
-        if (pill) pill.style.opacity = '1';
+        navIndicator.style.transform = `translate(${targetLeft}px, ${targetTop}px) scale(${scaleXVal}, ${scaleYVal})`;
+        if (navIndicatorPill) navIndicatorPill.style.opacity = '1';
       }
     }
   }
@@ -285,15 +390,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (activeLink) {
         positionIndicator(activeLink);
       } else {
-        const pill = navIndicator ? navIndicator.querySelector('.nav-indicator-pill') : null;
-        if (window.gsap && pill) {
-          gsap.to(pill, {
-            opacity: 0,
-            duration: 0.25,
-            ease: "power1.out"
-          });
-        } else if (pill) {
-          pill.style.opacity = '0';
+        if (window.gsap) {
+          gsap.to(navIndicatorPill, { autoAlpha: 0, duration: 0.25, ease: "power1.out" });
+        } else {
+          if (navIndicatorPill) navIndicatorPill.style.opacity = '0';
         }
       }
     });
@@ -328,6 +428,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Align indicator after page initial animations complete
   setTimeout(() => {
+    // If a hash exists on load, force that link to be active
+    if (window.location.hash) {
+      const correspondingLink = getNavLinkByHref(window.location.hash);
+      if (correspondingLink) {
+        navLinkItems.forEach(link => link.classList.remove('active'));
+        correspondingLink.classList.add('active');
+      }
+    }
+    
     const activeLink = document.querySelector('.nav-link-item.active');
     if (activeLink) {
       positionIndicator(activeLink, true);
@@ -392,20 +501,104 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 5. Science Section Orbital Nodes Stagger Pulse Animation
+  // 5. Science Section Orbital Nodes Circular Orbits with Hover Pausing
   if (window.gsap) {
-    // Set initial state for nodes before animating
-    gsap.set('.science-ring-node', { scale: 1, autoAlpha: 0.7 });
-
-    gsap.to('.science-ring-node', {
-      scale: 1.4,
-      autoAlpha: 1,
-      stagger: 0.2,
-      duration: 0.9,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
-    });
+    const scienceVisual = document.querySelector('.science-visual');
+    const ring = document.querySelector('.science-ring');
+    const nodes = document.querySelectorAll('.science-ring-node');
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (ring) {
+      // Disable static CSS rotation to let GSAP control it smoothly
+      ring.style.animation = 'none';
+    }
+    
+    if (!prefersReduced && nodes.length) {
+      // Center the nodes in the middle of the ring
+      gsap.set(nodes, {
+        left: '50%',
+        top: '50%',
+        xPercent: -50,
+        yPercent: -50,
+        position: 'absolute',
+        autoAlpha: 1
+      });
+      
+      // Node details
+      let speedObj = { value: 1.0 }; // Speed multiplier that can be tweened
+      let angleOffset = 0;
+      const radiusX = 190; // Half of 380px ring width
+      const radiusY = 190; // Circular orbit matching the dashed ring
+      
+      // Stagger node pulse scales to look organic and active
+      nodes.forEach((node, index) => {
+        gsap.to(node, {
+          scale: 1.15,
+          boxShadow: '0 0 12px rgba(var(--theme-primary-rgb), 0.45)',
+          duration: 2.2 + index * 0.3,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
+        });
+      });
+      
+      // Update coordinates in the ticker for 60fps compositor smoothness
+      const tickHandler = (time, deltaTime) => {
+        const dt = (deltaTime / 1000) || 0.0166;
+        // 0.2 radians/sec gives a peaceful ~31s full rotation at normal speed
+        const deltaSpeed = 0.2 * speedObj.value * dt;
+        angleOffset += deltaSpeed;
+        
+        // Rotate the dashed ring slowly
+        if (ring) {
+          gsap.set(ring, { rotation: (angleOffset * 180) / Math.PI * 0.15 });
+        }
+        
+        // Move each node around the circular path
+        nodes.forEach((node, index) => {
+          // Spread 4 nodes evenly: 0, 90, 180, 270 degrees
+          const baseAngle = (index * Math.PI) / 2;
+          const angle = baseAngle + angleOffset;
+          
+          const x = Math.cos(angle) * radiusX;
+          const y = Math.sin(angle) * radiusY;
+          
+          gsap.set(node, { x: x, y: y });
+        });
+      };
+      
+      gsap.ticker.add(tickHandler);
+      
+      // Hover listeners to slow down the orbit smoothly
+      if (scienceVisual) {
+        scienceVisual.addEventListener('mouseenter', () => {
+          gsap.to(speedObj, {
+            value: 0.15, // Slow down to an elegant crawl
+            duration: 1.8,
+            ease: "power2.out"
+          });
+          if (ring) {
+            gsap.to(ring, { scale: 1.03, duration: 0.8, ease: "power2.out" });
+          }
+        });
+        
+        scienceVisual.addEventListener('mouseleave', () => {
+          gsap.to(speedObj, {
+            value: 1.0, // Accelerate back to normal speed
+            duration: 1.5,
+            ease: "power2.out"
+          });
+          if (ring) {
+            gsap.to(ring, { scale: 1.0, duration: 0.8, ease: "power2.out" });
+          }
+        });
+      }
+    } else {
+      // Fallback for reduced motion: standard static placement or basic animation
+      if (ring) {
+        ring.style.animation = 'rotateRing 40s linear infinite';
+      }
+    }
   }
 
   // ==========================================================================
@@ -489,95 +682,174 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   if (window.gsap) {
     const bentoCards = document.querySelectorAll('.bento-card');
-    bentoCards.forEach(card => {
-      const setX = gsap.quickSetter(card, "rotateY", "deg");
-      const setY = gsap.quickSetter(card, "rotateX", "deg");
-      const setScale = gsap.quickSetter(card, "scale");
-      
-      card.style.transformStyle = "preserve-3d";
-      card.style.perspective = "1000px";
-      
-      card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (!prefersReduced) {
+      bentoCards.forEach(card => {
+        card.style.transformStyle = "preserve-3d";
+        card.style.perspective = "1000px";
         
-        const xc = rect.width / 2;
-        const yc = rect.height / 2;
+        // Define quickTo tweeners for butter-smooth animation
+        const rotateXTo = gsap.quickTo(card, "rotateX", { duration: 0.4, ease: "power2.out" });
+        const rotateYTo = gsap.quickTo(card, "rotateY", { duration: 0.4, ease: "power2.out" });
+        const scaleTo = gsap.quickTo(card, "scale", { duration: 0.4, ease: "power2.out" });
         
-        const rotateY = ((x - xc) / xc) * 6;
-        const rotateX = ((yc - y) / yc) * 6;
+        // Spotlight gradient position tweeners using custom CSS variables
+        const mouseXTo = gsap.quickTo(card, "--mouse-x", { duration: 0.3, ease: "power1.out" });
+        const mouseYTo = gsap.quickTo(card, "--mouse-y", { duration: 0.3, ease: "power1.out" });
         
-        setX(rotateY);
-        setY(rotateX);
-        setScale(1.02);
-      });
-      
-      card.addEventListener('mouseleave', () => {
-        gsap.to(card, {
-          rotateX: 0,
-          rotateY: 0,
-          scale: 1,
-          duration: 0.6,
-          ease: "power2.out",
-          overwrite: "auto"
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          const xc = rect.width / 2;
+          const yc = rect.height / 2;
+          
+          // Max 8 degrees of rotation for subtle premium tilt
+          const rotateY = ((x - xc) / xc) * 8;
+          const rotateX = ((yc - y) / yc) * 8;
+          
+          rotateYTo(rotateY);
+          rotateXTo(rotateX);
+          scaleTo(1.03); // Slightly scale up for premium hover depth
+          
+          // Animate CSS variables for spotlight center in pixels
+          mouseXTo(`${x}px`);
+          mouseYTo(`${y}px`);
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          rotateXTo(0);
+          rotateYTo(0);
+          scaleTo(1);
+          mouseXTo("50%");
+          mouseYTo("50%");
         });
       });
-    });
+    }
   }
 
   // ==========================================================================
-  // Testimonials Infinite Seamless Loop (GSAP + Drag)
+  // Testimonials Infinite Seamless Loop (GSAP utils.wrap + Drag)
   // ==========================================================================
-  const track = document.getElementById('reviews-track');
+  const track = document.querySelector('.reviews-track');
   if (track) {
-    // Clone original cards to fill the viewport seamlessly
-    const cards = Array.from(track.children);
-    cards.forEach(card => {
-      const clone = card.cloneNode(true);
-      track.appendChild(clone);
-    });
-
-    const trackWidth = track.scrollWidth;
-    const loopWidth = trackWidth / 2;
-
-    const loop = gsap.to(track, {
-      x: -loopWidth,
-      duration: 35,
-      ease: "none",
-      repeat: -1
-    });
-
-    // Pause on hover
-    track.addEventListener('mouseenter', () => loop.pause());
-    track.addEventListener('mouseleave', () => loop.play());
-
-    // Drag interactions using GSAP Draggable
-    if (window.Draggable) {
-      Draggable.create(track, {
-        type: "x",
-        trigger: ".reviews-slider-container",
-        bounds: { minX: -loopWidth, maxX: 0 },
-        onPress: function() {
-          loop.pause();
-        },
-        onDrag: function() {
-          let x = this.x;
-          if (x < -loopWidth) {
-            x += loopWidth;
-            gsap.set(track, { x: x });
-            this.update();
-          } else if (x > 0) {
-            x -= loopWidth;
-            gsap.set(track, { x: x });
-            this.update();
-          }
-        },
-        onDragEnd: function() {
-          loop.play();
-          gsap.to(loop, { timeScale: 1, duration: 0.5 });
-        }
+    const cards = gsap.utils.toArray('.review-card');
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (cards.length && !prefersReduced) {
+      // Get gap and card widths dynamically to support fluid layout responsive metrics
+      const trackStyle = window.getComputedStyle(track);
+      const gap = parseFloat(trackStyle.columnGap || trackStyle.gap) || 32;
+      const cardWidth = cards[0].offsetWidth || 380;
+      const singleWidth = cardWidth + gap;
+      const totalWidth = singleWidth * cards.length;
+      
+      // Clone all cards and append them to create a seamless double-row
+      cards.forEach(card => {
+        const clone = card.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        track.appendChild(clone);
       });
+      
+      // Auto scroll speed in pixels per second
+      let defaultSpeed = 45;
+      let speed = defaultSpeed;
+      let xOffset = 0;
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragStartOffset = 0;
+      
+      // Ticker loop: translate the entire track as a unit
+      const tickerHandler = (time, deltaTime) => {
+        if (isDragging) return;
+        
+        const dt = (deltaTime / 1000) || 0.0166;
+        xOffset -= speed * dt;
+        
+        // Reset when the first set has scrolled completely off
+        if (xOffset <= -totalWidth) {
+          xOffset += totalWidth;
+        }
+        if (xOffset > 0) {
+          xOffset -= totalWidth;
+        }
+        
+        gsap.set(track, { x: xOffset });
+      };
+      
+      gsap.ticker.add(tickerHandler);
+      
+      // Smooth deceleration and acceleration on hover
+      const sliderContainer = document.querySelector('.reviews-slider-container');
+      if (sliderContainer) {
+        let speedTween = null;
+        
+        sliderContainer.addEventListener('mouseenter', () => {
+          if (speedTween) speedTween.kill();
+          speedTween = gsap.to({ val: speed }, {
+            val: 0, // Slow down to complete stop
+            duration: 1.0,
+            ease: "power2.out",
+            onUpdate: function() {
+              speed = this.targets()[0].val;
+            }
+          });
+        });
+        
+        sliderContainer.addEventListener('mouseleave', () => {
+          if (speedTween) speedTween.kill();
+          speedTween = gsap.to({ val: speed }, {
+            val: defaultSpeed, // Speed back up
+            duration: 1.0,
+            ease: "power2.out",
+            onUpdate: function() {
+              speed = this.targets()[0].val;
+            }
+          });
+        });
+      }
+      
+      // Drag interactions using GSAP Draggable
+      if (window.Draggable) {
+        Draggable.create(track, {
+          type: "x",
+          trigger: ".reviews-slider-container",
+          onPress: function() {
+            isDragging = true;
+            dragStartX = this.x;
+            dragStartOffset = xOffset;
+          },
+          onDrag: function() {
+            // Update offset based on drag delta
+            xOffset = dragStartOffset + (this.x - dragStartX);
+            
+            // Keep it wrapped
+            if (xOffset <= -totalWidth) xOffset += totalWidth;
+            if (xOffset > 0) xOffset -= totalWidth;
+            
+            gsap.set(track, { x: xOffset });
+          },
+          onDragEnd: function() {
+            isDragging = false;
+            // Clear Draggable's own transform (we manage x manually)
+            gsap.set(track, { x: xOffset });
+            this.update();
+            
+            // Smooth resume back to auto-scrolling speed
+            speed = 0;
+            gsap.to({ val: 0 }, {
+              val: defaultSpeed,
+              duration: 1.2,
+              ease: "power2.out",
+              onUpdate: function() {
+                speed = this.targets()[0].val;
+              }
+            });
+          }
+        });
+      }
     }
   }
 
@@ -599,7 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const variant = buyBtn.getAttribute('data-variant');
         const data = productData[variant];
         if (data && typeof addToCart === 'function') {
-          addToCart(variant, data.fullName, 28.00, data.flavor);
+          addToCart(variant, data.fullName, 28.00, data.flavor, 'one-time', null, buyBtn);
         }
       }
     });

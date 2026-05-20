@@ -260,7 +260,7 @@ function renderCrossSells() {
         <div>
           <span class="badge crosssell-tag" style="${badgeColorMap[variantKey] || ''}">${safeHTML(data.badgeTitle)}</span>
           <h3 class="crosssell-title">
-            <a href="product.html?variant=${variantKey}" class="crosssell-card-link">${safeHTML(data.title)}</a>
+            <a href="product.html?variant=${variantKey}" class="crosssell-title-link">${safeHTML(data.title)}</a>
           </h3>
           <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Sabor ${safeHTML(data.flavor)}</p>
         </div>
@@ -285,10 +285,15 @@ function renderCrossSells() {
   if (window.gsap) {
     const cards = crossSellContainer.querySelectorAll('.crosssell-card');
     if (cards.length) {
-      gsap.fromTo(cards,
-        { autoAlpha: 0, y: 30 },
-        { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.15 }
-      );
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) {
+        gsap.set(cards, { autoAlpha: 1, y: 0 });
+      } else {
+        gsap.fromTo(cards,
+          { autoAlpha: 0, y: 30 },
+          { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.15 }
+        );
+      }
     }
   }
 }
@@ -396,6 +401,9 @@ function animatePDPArrival() {
 function animateScienceStats() {
   if (!window.gsap || !window.ScrollTrigger) return;
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return; // Skip animating count up, static values are already set in DOM
+
   const ids = ['science-stat-1-val', 'science-stat-2-val', 'science-stat-3-val'];
 
   ids.forEach(id => {
@@ -443,8 +451,95 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 2. Navigation Slide pill indicator configuration
   const navLinkItems = document.querySelectorAll('.nav-link-item');
-  const navIndicator = document.getElementById('nav-indicator-pill');
-  if (navIndicator) navIndicator.style.opacity = '0'; // Hide indicator on details page, breadcrumbs do the job
+  const navLinksUl = document.querySelector('.nav-links');
+  const navIndicator = document.querySelector('.nav-indicator-item'); // the absolute-positioned wrapper li
+  const navIndicatorPill = document.getElementById('nav-indicator-pill'); // the visual pill inside
+
+  function positionIndicator(link, immediate = false) {
+    if (!link || !navIndicator || !navLinksUl) return;
+    
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      if (window.gsap) {
+        gsap.to(navIndicatorPill, { autoAlpha: 0, duration: 0.2 });
+      } else {
+        if (navIndicatorPill) navIndicatorPill.style.opacity = '0';
+      }
+      return;
+    }
+
+    const ulRect = navLinksUl.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
+    
+    const targetLeft = linkRect.left - ulRect.left;
+    const targetWidth = linkRect.width;
+    const targetTop = linkRect.top - ulRect.top;
+    const targetHeight = linkRect.height;
+    
+    const scaleXVal = targetWidth / 100;
+    const scaleYVal = targetHeight / 40;
+
+    if (immediate) {
+      if (window.gsap) {
+        gsap.set(navIndicator, {
+          x: targetLeft,
+          scaleX: scaleXVal,
+          y: targetTop,
+          scaleY: scaleYVal
+        });
+        gsap.set(navIndicatorPill, { autoAlpha: 1 });
+      } else {
+        navIndicator.style.transform = `translate(${targetLeft}px, ${targetTop}px) scale(${scaleXVal}, ${scaleYVal})`;
+        if (navIndicatorPill) navIndicatorPill.style.opacity = '1';
+      }
+    } else {
+      if (window.gsap) {
+        gsap.killTweensOf([navIndicator, navIndicatorPill]);
+        
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReduced) {
+          gsap.set(navIndicator, {
+            x: targetLeft,
+            scaleX: scaleXVal,
+            y: targetTop,
+            scaleY: scaleYVal
+          });
+          gsap.to(navIndicatorPill, { autoAlpha: 1, duration: 0.15 });
+        } else {
+          gsap.to(navIndicator, {
+            x: targetLeft,
+            scaleX: scaleXVal,
+            y: targetTop,
+            scaleY: scaleYVal,
+            duration: 0.38,
+            ease: "elastic.out(1, 0.4)"
+          });
+          gsap.to(navIndicatorPill, { autoAlpha: 1, duration: 0.15 });
+        }
+      } else {
+        navIndicator.style.transform = `translate(${targetLeft}px, ${targetTop}px) scale(${scaleXVal}, ${scaleYVal})`;
+        if (navIndicatorPill) navIndicatorPill.style.opacity = '1';
+      }
+    }
+  }
+
+  // Hover transitions
+  navLinkItems.forEach(link => {
+    link.addEventListener('mouseenter', () => {
+      positionIndicator(link);
+    });
+  });
+
+  // When mouse leaves the entire nav UL, hide the indicator on product page
+  if (navLinksUl) {
+    navLinksUl.addEventListener('mouseleave', () => {
+      if (window.gsap) {
+        gsap.to(navIndicatorPill, { autoAlpha: 0, duration: 0.25, ease: "power1.out" });
+      } else {
+        if (navIndicatorPill) navIndicatorPill.style.opacity = '0';
+      }
+    });
+  }
 
   // 3. Media Gallery switching
   const mainImage = document.getElementById('pdp-main-image');
@@ -463,10 +558,15 @@ document.addEventListener('DOMContentLoaded', () => {
           backdrop.classList.add('open');
           document.body.style.overflow = 'hidden';
           if (window.gsap) {
-            gsap.fromTo('#nutrition-modal',
-              { y: '-60%', autoAlpha: 0, scale: 0.96 },
-              { y: '-50%', autoAlpha: 1, scale: 1, duration: 0.35, ease: 'back.out(1.7)' }
-            );
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReduced) {
+              gsap.set('#nutrition-modal', { y: '-50%', autoAlpha: 1, scale: 1 });
+            } else {
+              gsap.fromTo('#nutrition-modal',
+                { y: '-60%', autoAlpha: 0, scale: 0.96 },
+                { y: '-50%', autoAlpha: 1, scale: 1, duration: 0.35, ease: 'back.out(1.7)' }
+              );
+            }
           }
         }
         return;
@@ -509,17 +609,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modal && backdrop) {
       document.body.style.overflow = '';
       if (window.gsap) {
-        gsap.to('#nutrition-modal', {
-          y: '-40%',
-          autoAlpha: 0,
-          scale: 0.96,
-          duration: 0.3,
-          ease: 'power1.in',
-          onComplete: () => {
-            modal.classList.remove('open');
-            backdrop.classList.remove('open');
-          }
-        });
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReduced) {
+          gsap.set('#nutrition-modal', { autoAlpha: 0 });
+          modal.classList.remove('open');
+          backdrop.classList.remove('open');
+        } else {
+          gsap.to('#nutrition-modal', {
+            y: '-40%',
+            autoAlpha: 0,
+            scale: 0.96,
+            duration: 0.3,
+            ease: 'power1.in',
+            onComplete: () => {
+              modal.classList.remove('open');
+              backdrop.classList.remove('open');
+            }
+          });
+        }
       } else {
         modal.classList.remove('open');
         backdrop.classList.remove('open');
@@ -672,7 +779,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (typeof addToCart === 'function') {
-        addToCart(currentVariant, name, finalPrice, variantData.flavor, type, frequency);
+        addToCart(currentVariant, name, finalPrice, variantData.flavor, type, frequency, addCartBtn);
       }
     });
   }
@@ -688,7 +795,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const variantKey = buyBtn.getAttribute('data-variant');
         const data = pdpVariants[variantKey];
         if (data && typeof addToCart === 'function') {
-          addToCart(variantKey, data.title, 28.00, data.flavor);
+          addToCart(variantKey, data.title, 28.00, data.flavor, 'one-time', null, buyBtn);
         }
       }
     });

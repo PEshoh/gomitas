@@ -5,3 +5,4 @@ node_modules
 *.md
 docker-compose.yml
 grep.exe.stackdump
+referencias/*.mp4

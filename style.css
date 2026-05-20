@@ -324,20 +324,25 @@ p {
   font-weight: 600;
 }
 
-/* Sliding active glass background pill */
-.nav-indicator-item {
+/* Sliding active glass background pill (GPU transform-optimized) */
+.nav-links li.nav-indicator-item {
   position: absolute;
-  top: 0.3rem;
+  top: 0;
   left: 0;
-  height: calc(100% - 0.6rem);
-  width: 0;
+  height: 40px;
+  width: 100px;
   z-index: 1;
   pointer-events: none;
+  transform-origin: left top;
+  transform: translate(0, 0) scale(0, 0);
 }
 
 .nav-indicator-pill {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 8px;
+  right: 8px;
   background-color: var(--theme-accent-light);
   border: 1px solid rgba(var(--theme-accent-rgb), 0.15);
   border-radius: 100px;
@@ -786,10 +791,10 @@ p {
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--card-gradient);
+  background: radial-gradient(circle 320px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.15), transparent 75%), var(--card-gradient);
   opacity: 0.85;
   z-index: 1;
-  transition: var(--transition-smooth);
+  transition: opacity 0.4s ease;
 }
 
 .bento-card:hover .bento-card-bg-gradient {

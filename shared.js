@@ -173,8 +173,131 @@ function closeCart() {
   }
 }
 
+// Flying Gummy Particle Animation on Add to Cart
+function runAddToCartAnimation(clickedBtn, id) {
+  if (!clickedBtn || !window.gsap) {
+    openCart();
+    return;
+  }
+  
+  const cartBtn = document.getElementById('open-cart-btn');
+  if (!cartBtn) {
+    openCart();
+    return;
+  }
+  
+  // Create flying particle representing a glassy gummy bubble
+  const particle = document.createElement('div');
+  particle.className = `cart-fly-particle gummy-${id || 'generic'}`;
+  
+  // Color palette matching current theme variants
+  let color = '#7BB684'; // focus green
+  if (id === 'calm') {
+    color = '#9C82CD'; // calm purple
+  } else if (id === 'energy') {
+    color = '#FCAE3B'; // energy orange
+  }
+  
+  particle.style.position = 'fixed';
+  particle.style.zIndex = '99999';
+  particle.style.width = '24px';
+  particle.style.height = '24px';
+  particle.style.borderRadius = '50%';
+  particle.style.background = `radial-gradient(circle at 35% 35%, rgba(255,255,255,0.9) 0%, ${color} 70%, rgba(0,0,0,0.3) 100%)`;
+  particle.style.boxShadow = `0 4px 15px ${color}80, inset 0 -2px 4px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.6)`;
+  particle.style.pointerEvents = 'none';
+  particle.style.transform = 'translate(0, 0) scale(1)';
+  
+  const btnRect = clickedBtn.getBoundingClientRect();
+  const cartRect = cartBtn.getBoundingClientRect();
+  
+  // Center of clicked button
+  const startX = btnRect.left + btnRect.width / 2 - 12;
+  const startY = btnRect.top + btnRect.height / 2 - 12;
+  
+  // Center of cart button
+  const endX = cartRect.left + cartRect.width / 2 - 12;
+  const endY = cartRect.top + cartRect.height / 2 - 12;
+  
+  particle.style.left = `${startX}px`;
+  particle.style.top = `${startY}px`;
+  
+  document.body.appendChild(particle);
+  
+  const dx = endX - startX;
+  const dy = endY - startY;
+  
+  const tl = gsap.timeline({
+    onComplete: () => {
+      particle.remove();
+      
+      // Impact bounce on the cart bag icon
+      gsap.timeline()
+        .to(cartBtn, {
+          scale: 1.3,
+          y: -5,
+          duration: 0.12,
+          ease: 'power2.out'
+        })
+        .to(cartBtn, {
+          scale: 0.85,
+          y: 2,
+          duration: 0.08,
+          ease: 'power2.inOut'
+        })
+        .to(cartBtn, {
+          scale: 1.05,
+          y: -1,
+          duration: 0.08,
+          ease: 'power2.inOut'
+        })
+        .to(cartBtn, {
+          scale: 1,
+          y: 0,
+          duration: 0.08,
+          ease: 'power2.out',
+          onComplete: () => {
+            openCart();
+          }
+        });
+    }
+  });
+  
+  // Animate X (horizontal)
+  tl.to(particle, {
+    x: dx,
+    duration: 0.75,
+    ease: "power2.out"
+  }, 0);
+  
+  // Animate Y (vertical parabolic arc)
+  const peakY = Math.min(startY, endY) - 120;
+  const timeToPeak = 0.3;
+  
+  tl.to(particle, {
+    y: peakY - startY,
+    duration: timeToPeak,
+    ease: "power1.out"
+  }, 0);
+  
+  tl.to(particle, {
+    y: dy,
+    duration: 0.75 - timeToPeak,
+    ease: "power2.in"
+  }, timeToPeak);
+  
+  // Scale down and rotate particle during flight
+  tl.to(particle, {
+    scale: 0.5,
+    rotation: 360,
+    opacity: 0.8,
+    duration: 0.75,
+    ease: "power1.inOut"
+  }, 0);
+}
+
 // Main Add to Cart Logic
-function addToCart(id, name, price, flavor, type = 'one-time', frequency = null) {
+function addToCart(id, name, price, flavor, type = 'one-time', frequency = null, clickedBtn = null) {
   // Generate a unique item key based on variant, size/pack, and purchase type
   // This allows having one-time and subscriptions separate in the cart!
   const itemKey = `${id}-${type}-${frequency || 'single'}`;
@@ -197,7 +320,12 @@ function addToCart(id, name, price, flavor, type = 'one-time', frequency = null)
   
   saveCart();
   renderCart();
-  openCart();
+  
+  if (clickedBtn && window.gsap) {
+    runAddToCartAnimation(clickedBtn, id);
+  } else {
+    openCart();
+  }
 }
 
 function updateQuantity(itemKey, change) {

@@ -10,7 +10,6 @@ COPY . /usr/share/nginx/html/
 RUN rm -rf /usr/share/nginx/html/Dockerfile \
            /usr/share/nginx/html/nginx.conf \
            /usr/share/nginx/html/.impeccable \
-           /usr/share/nginx/html/referencias \
            /usr/share/nginx/html/*.md
 
 EXPOSE 80
