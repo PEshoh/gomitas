@@ -14,8 +14,8 @@ const pdpVariants = {
     badgeDesc: 'Foco cognitivo & claridad',
     badgeIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`,
     images: {
-      primary: 'referencias/WhatsApp Image 2026-05-19 at 2.27.50 PM (2).jpeg',
-      texture: 'referencias/WhatsApp Image 2026-05-19 at 2.27.51 PM.jpeg'
+      primary: 'referencias/focus.jpeg',
+      texture: 'referencias/texture.jpeg'
     },
     science: {
       activeTitle: 'Melena de León Orgánico (Hericium erinaceus)',
@@ -45,8 +45,8 @@ const pdpVariants = {
     badgeDesc: 'Relajación & tranquilidad',
     badgeIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`,
     images: {
-      primary: 'referencias/WhatsApp Image 2026-05-19 at 2.27.50 PM.jpeg',
-      texture: 'referencias/WhatsApp Image 2026-05-19 at 2.27.51 PM.jpeg'
+      primary: 'referencias/calm.jpeg',
+      texture: 'referencias/texture.jpeg'
     },
     science: {
       activeTitle: 'Extracto Premium de Ashwagandha KSM-66®',
@@ -76,8 +76,8 @@ const pdpVariants = {
     badgeDesc: 'Energía celular sostenida',
     badgeIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-2 10h9L11 22l2-10H4Z"/></svg>`,
     images: {
-      primary: 'referencias/WhatsApp Image 2026-05-19 at 2.27.50 PM (1).jpeg',
-      texture: 'referencias/WhatsApp Image 2026-05-19 at 2.27.51 PM.jpeg'
+      primary: 'referencias/energy.jpeg',
+      texture: 'referencias/texture.jpeg'
     },
     science: {
       activeTitle: 'Coenzima Q10 Coenzimática de Alta Pureza',

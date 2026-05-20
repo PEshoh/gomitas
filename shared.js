@@ -22,9 +22,9 @@ let cartItemsList, cartEmptyState, cartTotalPrice, cartBadgeCount;
 
 // Variant specific image mapping for Cart
 const variantImages = {
-  'focus': 'referencias/WhatsApp Image 2026-05-19 at 2.27.50 PM (2).jpeg',
-  'calm': 'referencias/WhatsApp Image 2026-05-19 at 2.27.50 PM.jpeg',
-  'energy': 'referencias/WhatsApp Image 2026-05-19 at 2.27.50 PM (1).jpeg'
+  'focus':  'referencias/focus.jpeg',
+  'calm':   'referencias/calm.jpeg',
+  'energy': 'referencias/energy.jpeg'
 };
 
 // Map variant names to human readable flavors
@@ -336,7 +336,7 @@ function renderCart() {
     cartItemDiv.className = `cart-item cart-item-${item.id}`;
     
     // Choose specific pack image or fallback
-    const imgUrl = variantImages[item.id] || 'referencias/Generated Image January 21, 2026 - 10_12PM.jpeg';
+    const imgUrl = variantImages[item.id] || 'referencias/pack.jpeg';
     const typeLabel = item.type === 'subscription' ? `Suscripción (cada ${item.frequency || '30'} días)` : 'Compra única';
     
     cartItemDiv.innerHTML = `

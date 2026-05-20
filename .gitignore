@@ -10,9 +10,10 @@ Thumbs.db
 *.stackdump
 *.log
 
-# Dev tools (never ship)
-.impeccable/
-referencias/
+# Dev media — exclude heavy videos and originals with spaces in name
+referencias/*.mp4
+referencias/WhatsApp*
+referencias/Generated*
 
 # Node (if added later)
 node_modules/
