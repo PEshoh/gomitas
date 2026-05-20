@@ -1,0 +1,18 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor configs
+.vscode/
+.idea/
+
+# Temp/debug
+*.stackdump
+*.log
+
+# Dev tools (never ship)
+.impeccable/
+referencias/
+
+# Node (if added later)
+node_modules/

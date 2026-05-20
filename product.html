@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-focus">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Clario | Elige tu estado de flujo. Gomitas funcionales con adaptógenos para calma, foco y energía.">
+  <title id="page-title">Clario | Smooth Focus — Gomita Funcional</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="product.css">
+  
+  <!-- GSAP Animation Engine + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       Announcement Bar
+       ========================================================================== -->
+  <div class="announcement-bar">
+    <div class="container text-center">
+      <span>🚚 Envío gratis en suscripciones y pedidos mayores a $40</span>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Header / Floating Glass Navigation
+       ========================================================================== -->
+  <header class="header-nav glass-panel container">
+    <a href="index.html" class="logo" aria-label="Clario Home">
+      <span class="logo-text">Clario</span>
+      <span class="logo-dot"></span>
+    </a>
+    
+    <nav aria-label="Main Navigation">
+      <ul class="nav-links">
+        <li class="nav-indicator-item" aria-hidden="true">
+          <div class="nav-indicator-pill" id="nav-indicator-pill"></div>
+        </li>
+        <li><a href="index.html#productos" class="nav-link-item">Productos</a></li>
+        <li><a href="index.html#ciencia" class="nav-link-item">Ciencia</a></li>
+        <li><a href="index.html#testimonios" class="nav-link-item">Reseñas</a></li>
+        <li><a href="index.html#about" class="nav-link-item">Nosotros</a></li>
+      </ul>
+    </nav>
+    
+    <div class="nav-actions">
+      <button class="cart-icon-btn" id="open-cart-btn" aria-label="Open Shopping Cart">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-badge-count" id="cart-badge-count">0</span>
+      </button>
+      <a href="#buying-box" class="btn-primary" style="padding: 0.65rem 1.5rem; font-size: 0.85rem;">Comprar</a>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       Product Hero Section (PDP Buy Box)
+       ========================================================================== -->
+  <main class="pdp-section container">
+    <!-- Breadcrumbs -->
+    <nav class="pdp-breadcrumbs" aria-label="Breadcrumbs">
+      <a href="index.html" class="breadcrumb-link">Inicio</a>
+      <span class="breadcrumb-separator">/</span>
+      <a href="index.html#productos" class="breadcrumb-link">Gomitas Funcionales</a>
+      <span class="breadcrumb-separator">/</span>
+      <span id="breadcrumb-current-product" class="breadcrumb-current">Smooth Focus</span>
+    </nav>
+
+    <div class="pdp-grid" id="buying-box">
+      <!-- LEFT COLUMN: Image Media Gallery -->
+      <section class="pdp-gallery-column" aria-label="Galería de Imágenes">
+        <div class="pdp-gallery-main glass-panel">
+          <!-- Active Gummy Pack Render (Zoom Enabled) -->
+          <div class="pdp-main-image-wrapper">
+            <img src="referencias/WhatsApp Image 2026-05-19 at 2.27.50 PM (2).jpeg" 
+                 alt="Gomitas Smooth Focus" 
+                 id="pdp-main-image" 
+                 class="pdp-main-image">
+          </div>
+          
+          <!-- Floating Theme-matching Badge -->
+          <div class="pdp-floating-badge" id="pdp-floating-badge">
+            <div class="badge-icon-wrap" id="pdp-badge-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            </div>
+            <div class="badge-text-wrap">
+              <span id="pdp-badge-title" class="badge-title">Melena de León</span>
+              <span id="pdp-badge-desc" class="badge-desc">Foco cognitivo & claridad</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thumbnail Carousel Nav -->
+        <div class="pdp-gallery-thumbnails">
+          <button class="pdp-thumbnail active" data-index="0" aria-label="Ver empaque principal">
+            <img src="referencias/WhatsApp Image 2026-05-19 at 2.27.50 PM (2).jpeg" alt="Empaque del producto" id="thumb-img-0">
+          </button>
+          <button class="pdp-thumbnail" data-index="1" aria-label="Ver primer plano de textura">
+            <img src="referencias/WhatsApp Image 2026-05-19 at 2.27.51 PM.jpeg" alt="Gomitas primer plano textura" id="thumb-img-1">
+          </button>
+          <button class="pdp-thumbnail nutrition-thumb" data-index="2" aria-label="Ver tabla nutricional">
+            <div class="nutrition-thumb-overlay">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>
+              <span>Info</span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: Buy Box and Controls -->
+      <section class="pdp-buy-column" aria-label="Controles de Compra">
+        <!-- Review Stars Header -->
+        <div class="pdp-reviews-badge">
+          <div class="stars-wrap">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <span class="rating-text">4.9</span>
+          <span class="rating-count">(184 reseñas de usuarios)</span>
+        </div>
+
+        <!-- Product Name & Tagline -->
+        <h1 class="pdp-title" id="pdp-product-title">Smooth focus</h1>
+        <p class="pdp-tagline-quote" id="pdp-product-quote">"Focus without the mental noise."</p>
+        <p class="pdp-description" id="pdp-product-desc">
+          Despeja la estática mental. Formulada con nootrópicos puros para mantenerte concentrado, agudo y alineado con tus objetivos diarios sin estimulación sintética.
+        </p>
+
+        <!-- Product Meta Badges -->
+        <div class="pdp-meta-grid">
+          <div class="meta-item">
+            <span class="meta-icon">🍋</span>
+            <span id="pdp-flavor-text">Manzana Verde</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">🍬</span>
+            <span>30 Gomitas Orgánicas</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">🧪</span>
+            <span>Clínicamente Probado</span>
+          </div>
+        </div>
+
+        <!-- 1. Size Selection Selector -->
+        <div class="pdp-control-group">
+          <label class="control-label">1. Elige la presentación:</label>
+          <div class="pdp-size-cards">
+            <!-- Card Standard -->
+            <button class="pdp-size-card active" data-size="standard" data-discount="1">
+              <span class="size-title">Frasco Estándar</span>
+              <span class="size-quantity">30 Gomitas (1 mes)</span>
+              <span class="size-price-tag" data-base-price="28.00">$28.00</span>
+            </button>
+            <!-- Card Double -->
+            <button class="pdp-size-card" data-size="double" data-discount="0.9">
+              <div class="size-badge-save">Ahorra 10%</div>
+              <span class="size-title">Pack Duplo</span>
+              <span class="size-quantity">60 Gomitas (2 meses)</span>
+              <span class="size-price-tag" data-base-price="50.40">$50.40</span>
+            </button>
+            <!-- Card Refill -->
+            <button class="pdp-size-card" data-size="refill" data-discount="0.95">
+              <div class="size-badge-save">Menos Plástico</div>
+              <span class="size-title">Bolsa Recarga</span>
+              <span class="size-quantity">30 Gomitas (Eco-pack)</span>
+              <span class="size-price-tag" data-base-price="26.60">$26.60</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Purchase Option Card Box (Subscribe & Save vs One-Time) -->
+        <div class="pdp-control-group">
+          <label class="control-label">2. Elige el tipo de compra:</label>
+          <div class="purchase-options-container">
+            <!-- SUBSCRIBE & SAVE CARD (Active default) -->
+            <div class="purchase-option-card active" id="option-subscribe">
+              <div class="option-header-row">
+                <label class="option-radio-label">
+                  <input type="radio" name="purchase_type" value="subscription" checked class="option-radio-input">
+                  <span class="radio-custom"></span>
+                  <span class="option-title-text">Suscripción & Ahorro</span>
+                </label>
+                <div class="price-stack">
+                  <span class="price-discount-value" id="price-sub-display">$22.40</span>
+                  <span class="price-original-value" id="price-sub-original">$28.00</span>
+                </div>
+              </div>
+              <div class="subscribe-perks">
+                <span class="perk-badge">Ahorra 20% Continuo</span>
+                <ul class="perks-list">
+                  <li>✓ Envío prioritario gratis continuo en cada frasco</li>
+                  <li>✓ Pausa, reprograma o cancela en tu panel con un clic</li>
+                  <li>✓ Regalo complementario en tu 3er pedido recurrente</li>
+                </ul>
+              </div>
+              
+              <!-- Frequency Dropdown -->
+              <div class="frequency-picker-wrap">
+                <label for="subscription-frequency" class="frequency-label">Frecuencia de envío:</label>
+                <div class="custom-select-wrapper">
+                  <select id="subscription-frequency" class="frequency-select">
+                    <option value="30">Cada 30 días (Sugerido)</option>
+                    <option value="45">Cada 45 días</option>
+                    <option value="60">Cada 60 días</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- ONE-TIME PURCHASE CARD -->
+            <div class="purchase-option-card" id="option-onetime">
+              <div class="option-header-row">
+                <label class="option-radio-label">
+                  <input type="radio" name="purchase_type" value="one-time" class="option-radio-input">
+                  <span class="radio-custom"></span>
+                  <span class="option-title-text">Compra Única</span>
+                </label>
+                <span class="price-discount-value" id="price-onetime-display">$28.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOMO / Real-Time Scarcity and Urgency Engine -->
+        <div class="fomo-banner-box">
+          <!-- Stock countdown -->
+          <div class="fomo-indicator-row">
+            <span class="fomo-tag-fire">🔥 Lote Limitado</span>
+            <span class="fomo-stock-warning">Solo quedan <strong id="pdp-stock-count">9</strong> frascos en stock</span>
+          </div>
+          <div class="fomo-progress-track">
+            <div class="fomo-progress-fill" id="pdp-stock-progressbar" style="width: 92%;"></div>
+          </div>
+          
+          <!-- Dispatch timer -->
+          <div class="fomo-dispatch-timer">
+            <span class="fomo-pulse-green"></span>
+            <span>Ordena en las próximas <strong id="pdp-dispatch-countdown">1h 45m 12s</strong> para recibirlo este <strong>viernes</strong>.</span>
+          </div>
+        </div>
+
+        <!-- Purchase Button Wrapper -->
+        <div class="pdp-cta-wrap">
+          <button class="btn-primary pdp-add-btn magnetic-button" id="pdp-buy-btn">
+            Añadir a la Suscripción — $22.40
+          </button>
+        </div>
+
+        <!-- Trust guarantees -->
+        <div class="pdp-trust-seal-bar">
+          <div class="guarantee-message">
+            <span class="guarantee-shield">🛡️</span>
+            <p><strong>Garantía de Satisfacción de 30 días:</strong> Si no experimentas mayor concentración y claridad en tu primer frasco, te devolvemos el total de tu dinero sin preguntas.</p>
+          </div>
+          
+          <div class="seal-icons">
+            <div class="seal-item">
+              <span class="seal-icon">🌿</span>
+              <span>100% Vegano</span>
+            </div>
+            <div class="seal-item">
+              <span class="seal-icon">🚫</span>
+              <span>Sin Azúcar</span>
+            </div>
+            <div class="seal-item">
+              <span class="seal-icon">🔬</span>
+              <span>Lab Certified</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       Interactive Science / Clinical Detail Section
+       ========================================================================== -->
+  <section class="pdp-science-section container reveal">
+    <div class="science-header">
+      <span class="section-tag">Transparencia Científica</span>
+      <h2 class="section-title">Fórmula Activa Clínicamente Comprobada</h2>
+      <p class="section-subtitle">
+        Desglosamos la composición química de cada dosis. Sin misterios, sin mezclas propietarias ocultas.
+      </p>
+    </div>
+
+    <div class="science-grid-accordion">
+      <!-- Ingredient deep dive card -->
+      <div class="science-detail-card glass-panel">
+        <h3 class="science-detail-title" id="science-active-title">Melena de León Orgánico (Hericium erinaceus)</h3>
+        <p class="science-detail-text" id="science-active-text">
+          Nuestra Melena de León se extrae del cuerpo fructífero del hongo mediante doble extracción para asegurar un contenido mínimo del 30% en polisacáridos. Estimula directamente el Factor de Crecimiento Nervioso (NGF), promoviendo la plasticidad cerebral, el enfoque cognitivo y el mantenimiento a largo plazo de las conexiones sinápticas.
+        </p>
+        <div class="science-molecular-stats">
+          <div class="stat-bubble">
+            <span class="stat-value" id="science-stat-1-val">500mg</span>
+            <span class="stat-label" id="science-stat-1-lbl">Dosis por porción</span>
+          </div>
+          <div class="stat-bubble">
+            <span class="stat-value" id="science-stat-2-val">30%</span>
+            <span class="stat-label" id="science-stat-2-lbl">Polisacáridos activos</span>
+          </div>
+          <div class="stat-bubble">
+            <span class="stat-value" id="science-stat-3-val">Doble</span>
+            <span class="stat-label" id="science-stat-3-lbl">Método extracción</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion Questions / Specs -->
+      <div class="science-accordion-list">
+        <!-- Accordion Item 1 -->
+        <div class="accordion-item active">
+          <button class="accordion-header" aria-expanded="true">
+            <span>¿Cuándo y cómo consumir Clario?</span>
+            <svg class="accordion-arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content" style="max-height: 200px;">
+            <p id="accordion-use-text">Recomendamos consumir 2 gomitas al día, preferiblemente por la mañana junto con tu rutina diaria o 30 minutos antes de comenzar tareas de alta demanda mental. No requieren agua ni comida y se asimilan rápidamente.</p>
+          </div>
+        </div>
+
+        <!-- Accordion Item 2 -->
+        <div class="accordion-item">
+          <button class="accordion-header" aria-expanded="false">
+            <span>¿Es seguro combinar Clario con cafeína?</span>
+            <svg class="accordion-arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content">
+            <p>Sí, es completamente seguro. De hecho, adaptógenos como la L-Teanina funcionan de manera sinérgica con la cafeína, suavizando los picos de adrenalina y evitando el posterior bajón energético (la típica sensación de colapso de media tarde).</p>
+          </div>
+        </div>
+
+        <!-- Accordion Item 3 -->
+        <div class="accordion-item">
+          <button class="accordion-header" aria-expanded="false">
+            <span>Pureza y Certificación del Producto</span>
+            <svg class="accordion-arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content">
+            <p>Nuestras gomitas se fabrican en instalaciones certificadas con BPM (Buenas Prácticas de Manufactura). Cada lote se somete a pruebas de laboratorio independientes para garantizar la ausencia de metales pesados, aditivos artificiales y alérgenos de gluten.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Cross-Sell recommendations (Other variants)
+       ========================================================================== -->
+  <section class="crosssell-section container reveal">
+    <div class="section-header">
+      <span class="section-tag">Colección</span>
+      <h2 class="section-title">Sintoniza otros estados mentales</h2>
+      <p>Explora nuestras fórmulas complementarias para armar tu rutina funcional diaria.</p>
+    </div>
+
+    <div class="crosssell-grid" id="crosssell-container">
+      <!-- Recommendations will be dynamically injected here to avoid showing the active variant -->
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Nutritional Sheet Modal Overlay
+       ========================================================================== -->
+  <div class="nutrition-modal-backdrop" id="nutrition-backdrop"></div>
+  <div class="nutrition-modal glass-panel" id="nutrition-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-title">Información Nutricional & Ingredientes</h3>
+      <button class="modal-close-btn" id="close-modal-btn" aria-label="Close Modal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="nutrition-table-wrapper">
+        <h4 id="nutrition-product-name" style="margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif;">Smooth Focus</h4>
+        <span class="nutrition-sub">Suministro: 30 Días | Porción recomendada: 2 gomitas al día</span>
+        
+        <table class="nutrition-table">
+          <thead>
+            <tr>
+              <th>Ingrediente Activo</th>
+              <th>Cantidad por Porción</th>
+              <th>% Valor Diario</th>
+            </tr>
+          </thead>
+          <tbody id="nutrition-table-body">
+            <!-- Dynamic Active ingredients will be injected here -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="ingredients-list-panel">
+        <h5>Ingredientes Base:</h5>
+        <p>Jarabe de Tapioca Orgánico, Azúcar de Caña Orgánica, Agua Purificada, Pectina de Frutas, Ácido Cítrico, Sabores Naturales Orgánicos, Extracto de Cúrcuma / Espirulina (para color natural).</p>
+        <p class="sugar-free-note">🍀 <strong>100% Vegano, sin gelatina animal y libre de azúcar añadida sintética.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Shopping Cart Drawer
+       ========================================================================== -->
+  <div class="cart-drawer-backdrop" id="cart-backdrop"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Shopping Cart Drawer">
+    <div class="cart-drawer-header">
+      <h3 class="cart-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Tu Carrito
+      </h3>
+      <button class="cart-close-btn" id="close-cart-btn" aria-label="Close Cart">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    
+    <!-- Cart Items list wrapper -->
+    <div class="cart-items-list" id="cart-items-list">
+      <!-- Empty state shown by default -->
+      <div class="cart-empty-state" id="cart-empty-state">
+        <div class="cart-empty-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+        </div>
+        <p class="cart-empty-text">Tu carrito está vacío.<br>Elige un estado mental para empezar.</p>
+      </div>
+    </div>
+    
+    <!-- Checkout Panel Footer -->
+    <div class="cart-drawer-footer">
+      <div class="cart-summary-line">
+        <span>Envío</span>
+        <span style="font-weight: 600; color: var(--theme-accent)">Gratis</span>
+      </div>
+      <div class="cart-summary-line total">
+        <span>Total</span>
+        <span id="cart-total-price">$0.00</span>
+      </div>
+      <button class="btn-primary checkout-btn" id="checkout-btn">Proceder al Pago</button>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       Footer Section
+       ========================================================================== -->
+  <footer class="footer-section" id="about">
+    <div class="container footer-grid">
+      <!-- Branding Column -->
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">
+          <span>Clario</span>
+          <span class="logo-dot"></span>
+        </a>
+        <p class="footer-desc">Diseñamos suplementos funcionales orgánicos en formatos agradables para ayudarte a navegar tu jornada diaria con total armonía.</p>
+      </div>
+      
+      <!-- Shop Links Column -->
+      <div>
+        <h3 class="footer-col-title">Colecciones</h3>
+        <ul class="footer-links">
+          <li><a href="product.html?variant=focus">Smooth Focus</a></li>
+          <li><a href="product.html?variant=calm">Calm & Clarity</a></li>
+          <li><a href="product.html?variant=energy">Energy & Flow</a></li>
+        </ul>
+      </div>
+      
+      <!-- Company Links Column -->
+      <div>
+        <h3 class="footer-col-title">Compañía</h3>
+        <ul class="footer-links">
+          <li><a href="index.html#ciencia">Ciencia de Adaptógenos</a></li>
+          <li><a href="index.html#about">Nosotros</a></li>
+          <li><a href="index.html#testimonios">Preguntas Frecuentes</a></li>
+        </ul>
+      </div>
+      
+      <!-- Newsletter Column -->
+      <div class="footer-newsletter">
+        <h3 class="footer-col-title">Únete a nuestra comunidad</h3>
+        <p class="footer-newsletter-text">Recibe guías de bienestar mental, novedades y accesos prioritarios a lanzamientos.</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" placeholder="Tu correo electrónico" class="newsletter-input" required aria-label="Newsletter email">
+          <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Legal and Bottom Area -->
+    <div class="container footer-bottom">
+      <span class="footer-copy">© 2026 Clario. Todos los derechos reservados. Hecho para mentes ocupadas.</span>
+    </div>
+  </footer>
+
+  <!-- Client-Side JavaScript Logic -->
+  <script src="shared.js"></script>
+  <script src="product.js"></script>
+
+</body>
+</html>

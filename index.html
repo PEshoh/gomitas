@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-focus">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Clario - Gomitas funcionales diseñadas para mentes ocupadas. Calma, enfoque y energía natural y orgánica.">
+  <title>Clario | Gomitas Funcionales para Mentes Ocupadas</title>
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- GSAP Animation Engine + ScrollTrigger + Draggable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       Header / Floating Glass Navigation
+       ========================================================================== -->
+  <header class="header-nav glass-panel container">
+    <a href="#" class="logo" aria-label="Clario Home">
+      <span class="logo-text">Clario</span>
+      <span class="logo-dot"></span>
+    </a>
+    
+    <nav aria-label="Main Navigation">
+      <ul class="nav-links">
+        <li class="nav-indicator-item" aria-hidden="true">
+          <div class="nav-indicator-pill" id="nav-indicator-pill"></div>
+        </li>
+        <li><a href="#productos" class="nav-link-item">Productos</a></li>
+        <li><a href="#ciencia" class="nav-link-item">Ciencia</a></li>
+        <li><a href="#testimonios" class="nav-link-item">Reseñas</a></li>
+        <li><a href="#about" class="nav-link-item">Nosotros</a></li>
+      </ul>
+    </nav>
+    
+    <div class="nav-actions">
+      <button class="cart-icon-btn" id="open-cart-btn" aria-label="Open Shopping Cart">
+        <!-- Lucide Shopping Bag Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-badge-count" id="cart-badge-count">0</span>
+      </button>
+      <a href="#productos" class="btn-primary" style="padding: 0.65rem 1.5rem; font-size: 0.85rem;">Comprar</a>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       Hero Section
+       ========================================================================== -->
+  <section class="hero-section">
+    <!-- Glowing morphing background shapes -->
+    <div class="backdrop-glow" id="hero-bg-glow"></div>
+    <div class="backdrop-glow-secondary"></div>
+    
+    <div class="container hero-grid">
+      <!-- Hero text and configuration -->
+      <div class="hero-content">
+        <span class="badge">
+          <!-- Leaf Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 2 5.5a7 7 0 0 1-7 7h-3"/><path d="M19 2c-1.5 2.5-3 5.5-3 8.5"/><path d="M16 10H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h4"/></svg>
+          Gomitas Funcionales
+        </span>
+        
+        <h1 class="hero-headline" id="hero-headline">
+          Diseñadas para
+          <span class="inline-gummy-pill">
+            <svg class="inline-gummy-svg" viewBox="0 0 40 20" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="36" height="16" rx="8" fill="var(--theme-accent-light)" stroke="var(--theme-primary)" stroke-width="1.5"/>
+              <circle cx="20" cy="10" r="4.5" fill="var(--theme-accent)"/>
+            </svg>
+          </span>
+          <span class="serif-italic" id="hero-title-accent">mentes ocupadas.</span>
+        </h1>
+        
+        <p class="hero-tagline" id="hero-tagline">
+          Fórmulas orgánicas con adaptógenos activos diseñadas para disipar el ruido mental. Encuentra claridad y concentración sostenida para tu día a día.
+        </p>
+        
+        <div class="hero-buttons">
+          <button class="btn-primary" id="hero-cta-btn">Añadir al Carrito — $28.00</button>
+          <a href="#ciencia" class="btn-outline">Ver Ingredientes</a>
+        </div>
+        
+        <!-- Interactive Variant Selector Pills -->
+        <div class="variant-selector-container">
+          <span class="selector-label">Elige tu estado de ánimo:</span>
+          <div class="variant-selectors">
+            <button class="variant-pill active" data-variant="focus" aria-label="Switch to Smooth Focus variant">
+              <span class="pill-dot pill-dot-focus"></span>
+              Enfoque
+            </button>
+            <button class="variant-pill" data-variant="calm" aria-label="Switch to Calm & Clarity variant">
+              <span class="pill-dot pill-dot-calm"></span>
+              Calma
+            </button>
+            <button class="variant-pill" data-variant="energy" aria-label="Switch to Energy & Flow variant">
+              <span class="pill-dot pill-dot-energy"></span>
+              Energía
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Hero product showcase -->
+      <div class="hero-showcase">
+        <div class="showcase-halo"></div>
+        <div class="showcase-inner">
+          <div class="image-card-container">
+            <!-- Smooth Focus Gummy Image (Held by model in lime shirt) -->
+            <img src="referencias/WhatsApp%20Image%202026-05-19%20at%202.27.50%20PM%20(2).jpeg" 
+                 alt="Gomitas Smooth Focus de Clario" 
+                 class="showcase-img active" 
+                 id="img-focus">
+            
+            <!-- Calm & Clarity Gummy Image (Held by model in lavender sweater) -->
+            <img src="referencias/WhatsApp%20Image%202026-05-19%20at%202.27.50%20PM.jpeg" 
+                 alt="Gomitas Calm & Clarity de Clario" 
+                 class="showcase-img" 
+                 id="img-calm">
+            
+            <!-- Energy & Flow Gummy Image (Pack resting inside cream tote bag) -->
+            <img src="referencias/WhatsApp%20Image%202026-05-19%20at%202.27.50%20PM%20(1).jpeg" 
+                 alt="Gomitas Energy & Flow de Clario" 
+                 class="showcase-img" 
+                 id="img-energy">
+          </div>
+          
+          <!-- Floating Badge -->
+          <div class="showcase-floating-badge" id="showcase-floating-badge">
+            <div class="badge-icon-wrap" id="badge-icon-wrap">
+              <!-- Focus default: Sparkle icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            </div>
+            <div class="badge-text-wrap">
+              <span class="badge-title" id="badge-title">Melena de León</span>
+              <span class="badge-desc" id="badge-desc">Foco cognitivo & claridad</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Trust Badges / Benefits
+       ========================================================================== -->
+  <section class="trust-badges-section">
+    <div class="container trust-flex">
+      <div class="trust-item">
+        <div class="trust-icon-container">
+          <!-- Leaf outline -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 2 5.5a7 7 0 0 1-7 7h-3"/><path d="M19 2c-1.5 2.5-3 5.5-3 8.5"/><path d="M16 10H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h4"/></svg>
+        </div>
+        <span>100% Vegano</span>
+      </div>
+      
+      <div class="trust-item">
+        <div class="trust-icon-container">
+          <!-- Shield/No-sugar ban -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
+        </div>
+        <span>Sin Azúcar Añadida</span>
+      </div>
+      
+      <div class="trust-item">
+        <div class="trust-icon-container">
+          <!-- Sparkle/clean -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <span>Libre de Gluten</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Product Bento Grid Section
+       ========================================================================== -->
+  <section class="products-section container" id="productos">
+    <div class="section-header reveal">
+      <span class="section-tag">Colección</span>
+      <h2 class="section-title">Elige tu estado de flujo</h2>
+      <p>Nuestras tres mezclas exclusivas están formuladas con botánicos puros y nootrópicos adaptogénicos para ayudarte a sintonizar tu día a día.</p>
+    </div>
+    
+    <div class="bento-grid">
+      <!-- Bento Card 1: Calm & Clarity -->
+      <div class="bento-card bento-card-calm glass-panel reveal" data-variant="calm">
+        <div class="bento-card-bg-gradient"></div>
+        <div class="bento-card-content">
+          <div class="bento-card-header">
+            <span class="badge" style="background-color: #F6F2FC; color: #62439D; border-color: rgba(156, 130, 205, 0.2)">Calma & Rest</span>
+            <h3 class="bento-card-title" style="margin-top: 1rem;"><a href="product.html?variant=calm" class="bento-title-link">Calm & Clarity</a></h3>
+            <p class="bento-card-tagline">"Soft calm for busy minds."</p>
+            <p class="bento-card-desc">Calma tu sistema nervioso y disipa el estrés. Ideal para desconectar después de un día agitado y favorecer un descanso profundo.</p>
+          </div>
+          
+          <div class="bento-image-container">
+            <div class="bento-pack-crop">
+              <img src="referencias/Generated%20Image%20January%2021,%202026%20-%2010_12PM.jpeg" alt="Empaque Calm & Clarity">
+            </div>
+          </div>
+          
+          <ul class="bento-card-benefits">
+            <li>
+              <span class="bento-benefit-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Reduce los niveles de cortisol (estrés)
+            </li>
+            <li>
+              <span class="bento-benefit-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Promueve la relajación física y mental
+            </li>
+          </ul>
+          
+          <div class="bento-card-footer">
+            <div class="bento-price-wrap">
+              <span class="bento-price">$28.00</span>
+              <span class="bento-servings">30 Gomitas | Sabor Mora</span>
+            </div>
+            <button class="bento-buy-btn" aria-label="Add Calm & Clarity to Cart" data-variant="calm" data-name="Calm & Clarity" data-price="28.00" data-flavor="Mora">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Bento Card 2: Smooth Focus -->
+      <div class="bento-card bento-card-focus glass-panel reveal" data-variant="focus">
+        <div class="bento-card-bg-gradient"></div>
+        <div class="bento-card-content">
+          <div class="bento-card-header">
+            <span class="badge" style="background-color: #EBF8F2; color: #2D5B37; border-color: rgba(123, 182, 132, 0.2)">Claridad & Foco</span>
+            <h3 class="bento-card-title" style="margin-top: 1rem;"><a href="product.html?variant=focus" class="bento-title-link">Smooth focus</a></h3>
+            <p class="bento-card-tagline">"Focus without the mental noise."</p>
+            <p class="bento-card-desc">Despeja la estática mental. Formulada con nootrópicos naturales para mantenerte concentrado, agudo y en tu tarea por más tiempo.</p>
+          </div>
+          
+          <div class="bento-image-container">
+            <div class="bento-pack-crop">
+              <img src="referencias/Generated%20Image%20January%2021,%202026%20-%2010_12PM.jpeg" alt="Empaque Smooth Focus">
+            </div>
+          </div>
+          
+          <ul class="bento-card-benefits">
+            <li>
+              <span class="bento-benefit-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Apoya la concentración prolongada
+            </li>
+            <li>
+              <span class="bento-benefit-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Estimula la conexión neuronal
+            </li>
+          </ul>
+          
+          <div class="bento-card-footer">
+            <div class="bento-price-wrap">
+              <span class="bento-price">$28.00</span>
+              <span class="bento-servings">30 Gomitas | Sabor Manzana Verde</span>
+            </div>
+            <button class="bento-buy-btn" aria-label="Add Smooth Focus to Cart" data-variant="focus" data-name="Smooth focus" data-price="28.00" data-flavor="Manzana Verde">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Bento Card 3: Energy & Flow -->
+      <div class="bento-card bento-card-energy glass-panel reveal" data-variant="energy">
+        <div class="bento-card-bg-gradient"></div>
+        <div class="bento-card-content">
+          <div class="bento-card-header">
+            <span class="badge" style="background-color: #FEF9EE; color: #B05B17; border-color: rgba(252, 174, 59, 0.2)">Energía Limpia</span>
+            <h3 class="bento-card-title" style="margin-top: 1rem;"><a href="product.html?variant=energy" class="bento-title-link">Energy & Flow</a></h3>
+            <p class="bento-card-tagline">"Stay bright, stay balanced."</p>
+            <p class="bento-card-desc">Impulsa tu productividad diaria. Aporta vitalidad limpia y sostenida sin los nervios ni los bajones de cafeína tradicionales.</p>
+          </div>
+          
+          <div class="bento-image-container">
+            <div class="bento-pack-crop">
+              <img src="referencias/Generated%20Image%20January%2021,%202026%20-%2010_12PM.jpeg" alt="Empaque Energy & Flow">
+            </div>
+          </div>
+          
+          <ul class="bento-card-benefits">
+            <li>
+              <span class="bento-benefit-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Energía física y mental sin temblores
+            </li>
+            <li>
+              <span class="bento-benefit-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Promueve la resistencia celular activa
+            </li>
+          </ul>
+          
+          <div class="bento-card-footer">
+            <div class="bento-price-wrap">
+              <span class="bento-price">$28.00</span>
+              <span class="bento-servings">30 Gomitas | Sabor Mandarina</span>
+            </div>
+            <button class="bento-buy-btn" aria-label="Add Energy & Flow to Cart" data-variant="energy" data-name="Energy & Flow" data-price="28.00" data-flavor="Mandarina">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       The Science Section
+       ========================================================================== -->
+  <section class="science-section" id="ciencia">
+    <div class="container science-grid">
+      <!-- Visual gummy orb render -->
+      <div class="science-visual reveal">
+        <div class="science-orb" id="science-orb"></div>
+        <div class="science-ring">
+          <span class="science-ring-node science-ring-node-1"></span>
+          <span class="science-ring-node science-ring-node-2"></span>
+          <span class="science-ring-node science-ring-node-3"></span>
+          <span class="science-ring-node science-ring-node-4"></span>
+        </div>
+        <div class="science-gummy-render" id="science-gummy"></div>
+      </div>
+      
+      <!-- Scientific data -->
+      <div class="science-content reveal">
+        <span class="section-tag">Nuestra Ciencia</span>
+        <h2 class="section-title" style="margin-bottom: 2rem;">¿Qué las hace inteligentes?</h2>
+        
+        <div class="science-list">
+          <div class="science-item">
+            <div class="science-num">01</div>
+            <div>
+              <h3 class="science-item-title">Adaptógenos Clínicos</h3>
+              <p>Utilizamos hongos funcionales y compuestos activos biológicos (como Melena de León y Ashwagandha) estandarizados a niveles clínicamente efectivos para regular el estrés y fomentar la plasticidad neuronal.</p>
+            </div>
+          </div>
+          
+          <div class="science-item">
+            <div class="science-num">02</div>
+            <div>
+              <h3 class="science-item-title">Sinergia Nootrópica</h3>
+              <p>La combinación de L-Teanina con precursores de energía celular asegura un enfoque sin el efecto de aceleración que genera la cafeína sintética o azúcares refinados.</p>
+            </div>
+          </div>
+          
+          <div class="science-item">
+            <div class="science-num">03</div>
+            <div>
+              <h3 class="science-item-title">Biodisponibilidad Máxima</h3>
+              <p>Nuestra base de pectina cítrica de liberación lenta permite que los compuestos activos se absorban de manera óptima a través de las mucosas y el tracto digestivo, brindando un efecto gradual y sostenido.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Reviews / Testimonial Marquee
+       ========================================================================== -->
+  <section class="reviews-section" id="testimonios">
+    <div class="section-header reveal">
+      <span class="section-tag">Experiencias</span>
+      <h2 class="section-title">Aprobado por mentes brillantes</h2>
+      <p>Miles de profesionales, desarrolladores y creativos ya integran Clario en sus rituales de enfoque y descanso.</p>
+    </div>
+    
+    <div class="reviews-slider-container">
+      <div class="reviews-track">
+        <!-- Review Card 1 -->
+        <div class="review-card glass-panel">
+          <div class="review-header">
+            <div class="review-user-info">
+              <div class="review-avatar-placeholder">AM</div>
+              <div>
+                <h3 class="review-name">Ana María V.</h3>
+                <span class="review-tag">Comprador verificado — Focus</span>
+              </div>
+            </div>
+            <div class="review-rating" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+          </div>
+          <p class="review-body">"Como programadora, la dispersión mental es mi mayor enemigo. Con Smooth Focus logro entrar en la 'zona' mucho más rápido y sin la ansiedad que me da el café."</p>
+          <span class="review-date">Hace 3 días</span>
+        </div>
+        
+        <!-- Review Card 2 -->
+        <div class="review-card glass-panel">
+          <div class="review-header">
+            <div class="review-user-info">
+              <div class="review-avatar-placeholder">JP</div>
+              <div>
+                <h3 class="review-name">Juan Pablo G.</h3>
+                <span class="review-tag">Comprador verificado — Calm</span>
+              </div>
+            </div>
+            <div class="review-rating" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+          </div>
+          <p class="review-body">"Calm & Clarity se ha convertido en mi ritual nocturno. Apaga el parloteo mental y me ayuda a dormir súper profundo sin despertarme aturdido al día siguiente."</p>
+          <span class="review-date">Hace 1 semana</span>
+        </div>
+        
+        <!-- Review Card 3 -->
+        <div class="review-card glass-panel">
+          <div class="review-header">
+            <div class="review-user-info">
+              <div class="review-avatar-placeholder">LR</div>
+              <div>
+                <h3 class="review-name">Lucas R.</h3>
+                <span class="review-tag">Comprador verificado — Energy</span>
+              </div>
+            </div>
+            <div class="review-rating" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+          </div>
+          <p class="review-body">"Increíble sabor. Me da el impulso necesario para entrenar en la tarde después de largas reuniones en la oficina. Cero bajón posterior."</p>
+          <span class="review-date">Hace 2 semanas</span>
+        </div>
+        
+        <!-- Review Card 4 -->
+        <div class="review-card glass-panel">
+          <div class="review-header">
+            <div class="review-user-info">
+              <div class="review-avatar-placeholder">SM</div>
+              <div>
+                <h3 class="review-name">Sofía M.</h3>
+                <span class="review-tag">Comprador verificado — Focus</span>
+              </div>
+            </div>
+            <div class="review-rating" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+          </div>
+          <p class="review-body">"Son una maravilla para estudiar. La niebla mental simplemente se disipa. Además, me encanta que sean completamente veganas y sin azúcares."</p>
+          <span class="review-date">Hace 3 semanas</span>
+        </div>
+
+        <!-- Duplicated for Infinite Seamless Loop scrolling -->
+        <div class="review-card glass-panel">
+          <div class="review-header">
+            <div class="review-user-info">
+              <div class="review-avatar-placeholder">AM</div>
+              <div>
+                <h3 class="review-name">Ana María V.</h3>
+                <span class="review-tag">Comprador verificado — Focus</span>
+              </div>
+            </div>
+            <div class="review-rating" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+          </div>
+          <p class="review-body">"Como programadora, la dispersión mental es mi mayor enemigo. Con Smooth Focus logro entrar en la 'zona' mucho más rápido y sin la ansiedad que me da el café."</p>
+          <span class="review-date">Hace 3 días</span>
+        </div>
+        
+        <div class="review-card glass-panel">
+          <div class="review-header">
+            <div class="review-user-info">
+              <div class="review-avatar-placeholder">JP</div>
+              <div>
+                <h3 class="review-name">Juan Pablo G.</h3>
+                <span class="review-tag">Comprador verificado — Calm</span>
+              </div>
+            </div>
+            <div class="review-rating" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+          </div>
+          <p class="review-body">"Calm & Clarity se ha convertido en mi ritual nocturno. Apaga el parloteo mental y me ayuda a dormir súper profundo sin despertarme aturdido al día siguiente."</p>
+          <span class="review-date">Hace 1 semana</span>
+        </div>
+
+        <div class="review-card glass-panel">
+          <div class="review-header">
+            <div class="review-user-info">
+              <div class="review-avatar-placeholder">LR</div>
+              <div>
+                <h3 class="review-name">Lucas R.</h3>
+                <span class="review-tag">Comprador verificado — Energy</span>
+              </div>
+            </div>
+            <div class="review-rating" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+          </div>
+          <p class="review-body">"Increíble sabor. Me da el impulso necesario para entrenar en la tarde después de largas reuniones en la oficina. Cero bajón posterior."</p>
+          <span class="review-date">Hace 2 semanas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Shopping Cart Drawer
+       ========================================================================== -->
+  <div class="cart-drawer-backdrop" id="cart-backdrop"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Shopping Cart Drawer">
+    <div class="cart-drawer-header">
+      <h3 class="cart-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Tu Carrito
+      </h3>
+      <button class="cart-close-btn" id="close-cart-btn" aria-label="Close Cart">
+        <!-- Cross Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    
+    <!-- Cart Items list wrapper -->
+    <div class="cart-items-list" id="cart-items-list">
+      <!-- Empty state shown by default -->
+      <div class="cart-empty-state" id="cart-empty-state">
+        <div class="cart-empty-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+        </div>
+        <p class="cart-empty-text">Tu carrito está vacío.<br>Elige un estado mental para empezar.</p>
+      </div>
+    </div>
+    
+    <!-- Checkout Panel Footer -->
+    <div class="cart-drawer-footer">
+      <div class="cart-summary-line">
+        <span>Envío</span>
+        <span style="font-weight: 600; color: var(--theme-accent)">Gratis</span>
+      </div>
+      <div class="cart-summary-line total">
+        <span>Total</span>
+        <span id="cart-total-price">$0.00</span>
+      </div>
+      <button class="btn-primary checkout-btn" id="checkout-btn">Proceder al Pago</button>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       Footer Section
+       ========================================================================== -->
+  <footer class="footer-section" id="about">
+    <div class="container footer-grid">
+      <!-- Branding Column -->
+      <div class="footer-brand">
+        <a href="#" class="footer-logo">
+          <span>Clario</span>
+          <span class="logo-dot"></span>
+        </a>
+        <p class="footer-desc">Diseñamos suplementos funcionales orgánicos en formatos agradables para ayudarte a navegar tu jornada diaria con total armonía.</p>
+      </div>
+      
+      <!-- Shop Links Column -->
+      <div>
+        <h3 class="footer-col-title">Colecciones</h3>
+        <ul class="footer-links">
+          <li><a href="#productos" class="footer-variant-link" data-variant="focus">Smooth Focus</a></li>
+          <li><a href="#productos" class="footer-variant-link" data-variant="calm">Calm & Clarity</a></li>
+          <li><a href="#productos" class="footer-variant-link" data-variant="energy">Energy & Flow</a></li>
+        </ul>
+      </div>
+      
+      <!-- Company Links Column -->
+      <div>
+        <h3 class="footer-col-title">Compañía</h3>
+        <ul class="footer-links">
+          <li><a href="#ciencia">Ciencia de Adaptógenos</a></li>
+          <li><a href="#about">Nosotros</a></li>
+          <li><a href="#testimonios">Preguntas Frecuentes</a></li>
+        </ul>
+      </div>
+      
+      <!-- Newsletter Column -->
+      <div class="footer-newsletter">
+        <h3 class="footer-col-title">Únete a nuestra comunidad</h3>
+        <p class="footer-newsletter-text">Recibe guías de bienestar mental, novedades y accesos prioritarios a lanzamientos.</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" placeholder="Tu correo electrónico" class="newsletter-input" required aria-label="Newsletter email">
+          <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">
+            <!-- Arrow icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Legal and Bottom Area -->
+    <div class="container footer-bottom">
+      <span class="footer-copy">© 2026 Clario. Todos los derechos reservados. Hecho para mentes ocupadas.</span>
+      
+      <div class="footer-socials">
+        <a href="#" class="social-icon-link" aria-label="Follow Clario on Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/></svg>
+        </a>
+        <a href="#" class="social-icon-link" aria-label="Follow Clario on Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+        </a>
+        <a href="#" class="social-icon-link" aria-label="Follow Clario on TikTok">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       Client-Side JavaScript Logical Engine
+       ========================================================================== -->
+  <script src="shared.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
