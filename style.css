@@ -1773,10 +1773,10 @@ p {
   }
   .header-nav {
     top: 1rem;
-    left: 0;
-    right: 0;
-    width: 100%;
-    max-width: 100%;
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    max-width: calc(100% - 2rem);
     box-sizing: border-box;
     padding: 0 clamp(0.75rem, 4vw, 1rem);
     height: 4.2rem;
